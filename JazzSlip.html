@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JazzCash Slip</title>
+  <style>
+    body {
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .slip {
+      position: relative;
+      width: 360px;              /* normalized width */
+      margin-bottom: 24px;       /* shift upward */
+      padding-bottom: 20px;      /* breathing space at bottom */
+    }
+    .slip img {
+      width: 100%;
+      height: auto;              /* keep aspect ratio */
+      display: block;
+    }
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      color: black;
+    }
+.overlay h3 {
+  text-align: center;
+  margin-top: 31px;   /* overall position from top */
+  margin-bottom: 8px; /* small gap before TID */
+  font-weight: 900;
+  font-size:21px
+}
+
+.overlay .tid {
+  text-align: center;
+  font-weight:700;
+  
+  color: rgb(65,65,65);
+  margin: 0;          
+  padding: 0;     
+  font-size: 13px
+}
+
+.overlay .datetime {
+  text-align: center;
+  font-weight: 500;
+  font-size:13px;
+  color: rgb(108,108,108);
+  display: block;
+  margin-top: 4px;  
+}
+ .overlay .amount {
+  text-align: center;
+  margin-top: 39px;
+  margin-bottom: 6px;
+  line-height: 1.3;   /* corrected spelling + tighter line spacing */
+}
+
+.overlay .amount .major {
+  font-size: 28px;    /* bigger for main part */
+  font-weight: 900;   /* maximum bold */
+}
+
+.overlay .amount .minor {
+  font-size: 17px;    /* smaller trailing digits */
+  font-weight: 900;   /* bold but smaller */
+}
+
+.overlay .transfer {
+  text-align: center;
+  color: rgb(108,108,108);
+  margin-top: 2px;    /* tiny gap directly below amount */
+  margin-bottom: 20px;
+}
+    .overlay .fee {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      margin-top: 30px;          /* aligns with fee separator */
+      font-size: 18px;
+    }
+    .overlay .to {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      margin-top: 37px;          /* aligns with To separator */
+      font-size: 18px;
+    }
+    .overlay .from {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      margin-top: 30px;          /* aligns with From separator */
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slip">
+    <img src="https://amankhan85.github.io/App/bg.png" alt="Slip Background">
+
+    <div class="overlay">
+      <h3>Transaction Successful</h3>
+    <p class="tid" id="tid"></p>
+<span class="datetime" id="datetime"></span>
+
+<script>
+  // Generate a random 12-digit TID
+  function generateTID() {
+    let tid = '';
+    for (let i = 0; i < 12; i++) {
+      tid += Math.floor(Math.random() * 10); // random digit 0–9
+    }
+    return tid;
+  }
+
+  // Format current date and time once
+  function formatDateTime() {
+    const now = new Date();
+    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+    const optionsTime = { hour: '2-digit', minute: '2-digit' };
+
+    const date = now.toLocaleDateString('en-US', optionsDate);
+    const time = now.toLocaleTimeString('en-US', optionsTime);
+
+    return `On ${date} at ${time}`;
+  }
+
+  // Insert values into slip (runs once at load)
+  document.getElementById("tid").textContent = "TID: " + generateTID();
+  document.getElementById("datetime").textContent = formatDateTime();
+</script>
+      <p class="amount">
+  <span class="major">Rs. 3000</span><span class="minor">.00</span>
+</p>
+      <p style="font-size:16px; font-weight:600;" class="transfer">Transferred to JazzCash</p>
+
+      <div class="fee">
+        <span style="color:rgb(108,108,108);">Fee</span>
+        <span style="color:rgb(50,50,50);">Rs. 0.00</span>
+      </div>
+
+      <div class="to">
+        <span style="color:rgb(108,108,108);">To</span>
+        <span style="color:rgb(50,50,50); text-align:right;">Aman Akash<br>03285993460</span>
+      </div>
+
+      <div class="from">
+        <span style="color:rgb(108,108,108);">From</span>
+        <span style="color:rgb(50,50,50); text-align:right;">Mirza Junaid Ahmed<br>03285993460</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
