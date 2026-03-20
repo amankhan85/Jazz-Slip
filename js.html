@@ -10,13 +10,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column; /* so buttons sit below slip */
       height: 100vh;
       margin: 0;
     }
     .slip {
       position: relative;
       width: 360px;              /* normalized width */
-      margin-bottom: 24px;       /* shift upward */
+      margin-bottom: 10px;       /* space before buttons */
       padding-bottom: 20px;      /* breathing space at bottom */
     }
     .slip img {
@@ -75,31 +76,36 @@
       margin-top: 2px;
       margin-bottom: 20px;
     }
-    .overlay .fee {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-      margin-top: 30px;
-      font-size: 18px;
-    }
-    .overlay .to {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-      margin-top: 37px;
-      font-size: 18px;
-    }
+    .overlay .fee,
+    .overlay .to,
     .overlay .from {
       display: flex;
       justify-content: space-between;
       padding: 0 20px;
-      margin-top: 30px;
       font-size: 18px;
+    }
+    .overlay .fee { margin-top: 30px; }
+    .overlay .to { margin-top: 37px; }
+    .overlay .from { margin-top: 30px; }
+
+    /* Save & Share buttons */
+    .actions {
+      text-align: center;
+    }
+    .actions button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg,#00c6ff,#0072ff);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="slip">
+  <div class="slip" id="slipArea">
     <img src="https://amankhan85.github.io/App/bg.png" alt="Slip Background">
 
     <div class="overlay">
@@ -129,6 +135,14 @@
     </div>
   </div>
 
+  <!-- Save & Share buttons -->
+  <div class="actions">
+    <button onclick="saveSlip()">Save</button>
+    <button onclick="shareSlip()">Share</button>
+  </div>
+
+  <!-- html2canvas for capture -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
     // Generate a random 12-digit TID
     function generateTID() {
@@ -155,8 +169,6 @@
 
     // Get values from URL
     const params = new URLSearchParams(window.location.search);
-
-    // Replace slip values with form inputs
     document.getElementById("amountMajor").textContent = "Rs. " + (params.get("amount") || "0");
     document.getElementById("fee").textContent = "Rs. " + (params.get("fee") || "0");
 
@@ -167,6 +179,46 @@
     const fromName = params.get("fromName") || "";
     const fromNumber = params.get("fromNumber") || "";
     document.getElementById("from").innerHTML = fromName + "<br>" + fromNumber;
+
+    // Save slip as image
+    function saveSlip() {
+      const slip = document.getElementById('slipArea');
+      html2canvas(slip).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'JazzSlip.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    // Share slip image
+    function shareSlip() {
+      const slip = document.getElementById('slipArea');
+      html2canvas(slip).then(canvas => {
+        canvas.toBlob(blob => {
+          const file = new File([blob], "JazzSlip.png", { type: "image/png" });
+          if (navigator.share) {
+            navigator.share({
+              files: [file],
+              title: "JazzCash Slip",
+              text: "Here is your transaction slip"
+            });
+          } else {
+            alert("Sharing not supported on this device.");
+          }
+        });
+      });
+    }
+
+    // Back navigation handling
+    window.onload = function() {
+      history.pushState({ page: "slip" }, "Slip", window.location.href);
+    };
+    window.onpopstate = function(event) {
+      if (event.state && event.state.page === "slip") {
+        window.location.href = "jf.html"; // go back to form
+      }
+    };
   </script>
 </body>
 </html>
