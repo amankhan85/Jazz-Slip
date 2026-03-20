@@ -103,33 +103,45 @@
 <body>
   <div class="form-container">
     <h2>Fill Transaction Details</h2>
-    <form action="js.html" method="GET">
-      <div class="form-group">
-        <input type="text" name="amount" placeholder=" " required>
-        <label>Amount</label>
-      </div>
-      <div class="form-group">
-        <input type="text" name="fee" placeholder=" " required>
-        <label>Fee</label>
-      </div>
-      <div class="form-group">
-        <input type="text" name="receiverName" placeholder=" " required>
-        <label>Receiver Name</label>
-      </div>
-      <div class="form-group">
-        <input type="text" name="receiverNumber" placeholder=" " required>
-        <label>Receiver Number</label>
-      </div>
-      <div class="form-group">
-        <input type="text" name="fromName" placeholder=" " required>
-        <label>Sender Name</label>
-      </div>
-      <div class="form-group">
-        <input type="text" name="fromNumber" placeholder=" " required>
-        <label>Sender Number</label>
-      </div>
-      <button class="btn" type="submit">Get Slip</button>
-    </form>
+   <form action="js.html" method="GET">
+  <div class="form-group">
+    <!-- Amount: numeric keyboard with dot/comma -->
+    <input type="number" name="amount" inputmode="decimal" step="any" placeholder=" " required>
+    <label>Amount</label>
+  </div>
+
+  <div class="form-group">
+    <!-- Fee: numeric keyboard with dot/comma -->
+    <input type="number" name="fee" inputmode="decimal" step="any" placeholder=" " required>
+    <label>Fee</label>
+  </div>
+
+  <div class="form-group">
+    <!-- Receiver Name: normal text keyboard -->
+    <input type="text" name="receiverName" placeholder=" " required>
+    <label>Receiver Name</label>
+  </div>
+
+  <div class="form-group">
+    <!-- Receiver Number: numeric keypad -->
+    <input type="tel" name="receiverNumber" inputmode="numeric" pattern="[0-9.,]*" placeholder=" " required>
+    <label>Receiver Number</label>
+  </div>
+
+  <div class="form-group">
+    <!-- From Name: normal text keyboard -->
+    <input type="text" name="fromName" placeholder=" " required>
+    <label>From Name</label>
+  </div>
+
+  <div class="form-group">
+    <!-- From Number: numeric keypad -->
+    <input type="tel" name="fromNumber" inputmode="numeric" pattern="[0-9.,]*" placeholder=" " required>
+    <label>From Number</label>
+  </div>
+
+  <button class="btn" type="submit">Get Slip</button>
+</form>
 
     <!-- Branding footer -->
     <div class="branding">
@@ -137,5 +149,19 @@
       <p>Designed by <strong>MR ZAKUTA</strong></p>
     </div>
   </div>
+  <script>
+  // Push a history state when form loads
+  window.onload = function() {
+    history.pushState({ page: "form" }, "Form", window.location.href);
+  };
+
+  // Handle back button
+  window.onpopstate = function(event) {
+    if (event.state && event.state.page === "form") {
+      // If already on form page, let browser close the app
+      window.close(); // On mobile, this will exit the webview/app
+    }
+  };
+</script>
 </body>
 </html>
