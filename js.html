@@ -10,17 +10,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column; /* buttons below slip */
+      flex-direction: column;
       height: 100vh;
       margin: 0;
     }
-    .slip {
+    #slipCard {
       position: relative;
-      width: 360px;              /* normalized width */
-      margin-bottom: 10px;       /* space before buttons */
-      padding-bottom: 20px;
+      width: 360px; /* matches slip background */
     }
-    .slip img {
+    #slipCard img {
       width: 100%;
       height: auto;
       display: block;
@@ -90,6 +88,7 @@
 
     .actions {
       text-align: center;
+      margin-top: 12px;
     }
     .actions button {
       padding: 10px 20px;
@@ -104,10 +103,9 @@
   </style>
 </head>
 <body>
-  <!-- capture only this slip area -->
-  <div class="slip" id="slipArea">
+  <!-- exact slip card -->
+  <div id="slipCard">
     <img src="https://amankhan85.github.io/App/bg.png" alt="Slip Background">
-
     <div class="overlay">
       <h3>Transaction Successful</h3>
       <p class="tid" id="tid"></p>
@@ -163,7 +161,7 @@
     document.getElementById("from").innerHTML = (params.get("fromName")||"") + "<br>" + (params.get("fromNumber")||"");
 
     function saveSlip() {
-      const slip = document.getElementById('slipArea');
+      const slip = document.getElementById('slipCard');
       html2canvas(slip,{backgroundColor:null,scale:2}).then(canvas=>{
         const link=document.createElement('a');
         link.download='JazzSlip.png';
@@ -172,7 +170,7 @@
       });
     }
     function shareSlip() {
-      const slip = document.getElementById('slipArea');
+      const slip = document.getElementById('slipCard');
       html2canvas(slip,{backgroundColor:null,scale:2}).then(canvas=>{
         canvas.toBlob(blob=>{
           const file=new File([blob],"JazzSlip.png",{type:"image/png"});
